@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MetroVerify - Online Verification System for Weighing and Measuring Instruments</title>
+  <meta name="description" content="National Legal Metrology Digital Verification, Calibration Testing, Stamping, and Anti-Tamper Certification System for Commercial Weighing & Measuring Instruments.">
+  <meta name="keywords" content="legal metrology, weighing instruments, calibration, verification, stamping, OIML R76, consumer protection, weights and measures">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Top Government Legal Metrology Ribbon -->
+  <aside class="gov-ribbon" aria-label="Official Regulatory Banner">
+    <div class="gov-ribbon-left">
+      <span class="live-pulse-dot" aria-hidden="true"></span>
+      <span>National Legal Metrology Digital Network • Standard Weights & Measures Regulatory Portal</span>
+    </div>
+    <div style="display: flex; gap: 1rem; align-items: center;">
+      <span style="opacity: 0.85; font-size: 0.72rem;">OIML R 76 / ISO 17025 Compliant</span>
+      <button id="publicFileGrievanceBtn" class="btn btn-danger btn-sm" style="padding: 2px 8px; font-size: 0.7rem; border-radius: 4px;">
+        Report Tampering / Fraud
+      </button>
+    </div>
+  </aside>
+
+  <!-- Application Main Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <!-- Brand & Emblem -->
+      <div class="brand-wrapper" id="brandNavHome" role="banner">
+        <div class="brand-emblem" aria-hidden="true">
+          <!-- Balanced Scales Emblem SVG -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
+            <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path>
+            <path d="M7 21h10"></path>
+            <path d="M12 3v18"></path>
+            <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>METROVERIFY</h1>
+          <div class="brand-tagline">Online Verification & Stamping System</div>
+        </div>
+      </div>
+
+      <!-- Role-Based Portal Navigation Tabs -->
+      <nav class="role-nav-pill-box" aria-label="User Portal Navigation">
+        <button class="role-pill-btn active" data-role="trader" id="navTraderBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          Trader Portal
+        </button>
+        <button class="role-pill-btn" data-role="inspector" id="navInspectorBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+          Inspector Field Suite
+        </button>
+        <button class="role-pill-btn" data-role="citizen" id="navCitizenBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          Citizen QR Scanner
+        </button>
+        <button class="role-pill-btn" data-role="admin" id="navAdminBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20v-6M6 20V10M18 20V4"></path></svg>
+          Command Center
+        </button>
+      </nav>
+
+      <!-- Utility Toggles (Theme, Audio) -->
+      <div class="header-actions">
+        <button class="icon-btn" id="audioToggleBtn" title="Toggle Sound Feedback" aria-label="Toggle Sound">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+        </button>
+        <button class="icon-btn" id="themeToggleBtn" title="Toggle Light/Dark Theme" aria-label="Toggle Theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Body -->
+  <main class="app-container" id="mainAppContent">
+
+    <!-- ============================================================== -->
+    <!-- VIEW 1: TRADER / MERCHANT SELF-SERVICE PORTAL                  -->
+    <!-- ============================================================== -->
+    <section id="view-trader" class="portal-view active" aria-labelledby="traderViewHeading">
+      <div class="view-header">
+        <div class="view-header-title">
+          <h2 id="traderViewHeading">Establishment Instrument Management</h2>
+          <p>Register commercial weighing and measuring instruments, submit re-verification applications, and download certified e-stamps.</p>
+        </div>
+        <div>
+          <button class="btn btn-primary" id="registerNewInstrumentBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Register New Instrument
+          </button>
+        </div>
+      </div>
+
+      <!-- Trader Dashboard KPIs -->
+      <div class="stats-grid">
+        <div class="stat-card" style="--stat-accent: #0ea5e9; --stat-icon-bg: rgba(14, 165, 233, 0.15);">
+          <div class="stat-icon-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"></path><path d="M7 21h10"></path><path d="M12 3v18"></path></svg>
+          </div>
+          <div class="stat-content">
+            <div class="stat-label">Registered Devices</div>
+            <div class="stat-value" id="traderTotalInst">6</div>
+            <div class="stat-trend positive">Active in Registry</div>
+          </div>
+        </div>
+
+        <div class="stat-card" style="--stat-accent: #10b981; --stat-icon-bg: rgba(16, 185, 129, 0.15);">
+          <div class="stat-icon-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          </div>
+          <div class="stat-content">
+            <div class="stat-label">Certified & Verified</div>
+            <div class="stat-value" id="traderVerifiedCount">3</div>
+            <div class="stat-trend positive">Fully Compliant</div>
+          </div>
+        </div>
+
+        <div class="stat-card" style="--stat-accent: #f59e0b; --stat-icon-bg: rgba(245, 158, 11, 0.15);">
+          <div class="stat-icon-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </div>
+          <div class="stat-content">
+            <div class="stat-label">Due for Re-Verification</div>
+            <div class="stat-value" id="traderExpiringCount">2</div>
+            <div class="stat-trend warning">Action Required</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trader Instruments Table Panel -->
+      <div class="glass-panel">
+        <div class="panel-header">
+          <h3>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            Weighing & Measuring Equipment Inventory
+          </h3>
+          <span class="badge badge-outline">Live Sync with Legal Metrology Central Registry</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Instrument Name & Establishment</th>
+                <th>UID / QR Seal</th>
+                <th>Category</th>
+                <th>Capacity / Class</th>
+                <th>Verification Status</th>
+                <th>Validity Expiry</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="traderInstrumentsTableBody">
+              <!-- Dynamically rendered by app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- VIEW 2: INSPECTOR FIELD SUITE & CALIBRATION ENGINE             -->
+    <!-- ============================================================== -->
+    <section id="view-inspector" class="portal-view" aria-labelledby="inspectorViewHeading">
+      <div class="view-header">
+        <div class="view-header-title">
+          <h2 id="inspectorViewHeading">Legal Metrology Field Verification & Calibration</h2>
+          <p>On-site digital calibration testing, Maximum Permissible Error (MPE) calculation, and cryptographic seal issuance.</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <span class="badge badge-verified">Officer: Dr. Anita Sharma (ID: INS-OFFICER-07)</span>
+        </div>
+      </div>
+
+      <!-- Inspector Queue Section -->
+      <div class="glass-panel">
+        <div class="panel-header">
+          <h3>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+            Pending Verification & Re-Stamping Queue
+          </h3>
+          <span class="badge badge-pending">Assigned Inspections</span>
+        </div>
+        <div id="inspectorQueueList">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- Active Digital Calibration Testing Suite (Interactive) -->
+      <div class="glass-panel" id="inspectorTestingSuitePanel" style="display: none; border: 2px solid var(--primary);">
+        <div class="panel-header">
+          <div>
+            <h3 style="color: var(--primary);">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+              Active Verification Test Session
+            </h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">
+              Instrument: <strong id="calibTargetName" style="color: var(--text-main);"></strong> | 
+              UID: <span class="mono-id" id="calibTargetUid"></span> | 
+              Shop: <strong id="calibTargetShop"></strong>
+            </p>
+          </div>
+          <div style="display: flex; gap: 0.6rem; align-items: center;">
+            <span class="badge badge-outline">Class: <b id="calibTargetClass">Class III</b></span>
+            <span class="badge badge-outline">Max: <b id="calibTargetMax">30kg</b></span>
+            <span class="badge badge-outline">e: <b id="calibTargetE">5g</b></span>
+          </div>
+        </div>
+
+        <!-- Virtual Scale Mount & Sandbox -->
+        <div style="margin-bottom: 2rem;">
+          <h4 style="margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between;">
+            <span>Digital Instrument Test Bench & Scale Simulator</span>
+            <button class="btn btn-outline btn-sm" id="transferScaleReadingBtn" style="border-color: var(--primary); color: var(--primary);">
+              ⬇️ Transfer Load & Reading to Verification Form
+            </button>
+          </h4>
+          <div id="virtualScaleMount">
+            <!-- Virtual scale is dynamically rendered here -->
+          </div>
+        </div>
+
+        <!-- Calibration Test Entry Form -->
+        <div class="glass-panel" style="background: var(--bg-tertiary); margin-bottom: 1.5rem; padding: 1.25rem;">
+          <h4 style="margin-bottom: 1rem;">Add Calibration Test Point (OIML R76 Routine)</h4>
+          <div class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+            <div class="form-group">
+              <label>Test Routine Type:</label>
+              <select id="testPointTypeSelect" class="form-control">
+                <option value="Increasing Load">Increasing Load Test</option>
+                <option value="Decreasing Load">Decreasing Load Test</option>
+                <option value="Corner Load (Eccentricity)">Corner Load (Eccentricity)</option>
+                <option value="Repeatability Run">Repeatability Run</option>
+                <option value="Zero Return">Zero Return Check</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Certified Standard Load (g):</label>
+              <input type="number" id="testPointLoadInput" class="form-control" placeholder="e.g. 500" step="any">
+            </div>
+            <div class="form-group">
+              <label>Indicated Reading on Scale (g):</label>
+              <input type="number" id="testPointIndicatedInput" class="form-control" placeholder="e.g. 500.5" step="any">
+            </div>
+            <div class="form-group" style="justify-content: flex-end;">
+              <button class="btn btn-primary" id="addTestPointBtn" style="height: 42px;">
+                Calculate MPE & Record
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recorded Test Points Table -->
+        <div class="table-responsive" style="margin-bottom: 1.5rem;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Test Point</th>
+                <th>Standard Load</th>
+                <th>Observed Reading</th>
+                <th>Observed Error</th>
+                <th>Permissible MPE</th>
+                <th>Tolerance Verdict</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="testPointsTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Summary & Final Official Stamping Card -->
+        <div class="glass-panel" id="calibrationSummaryCard" style="display: none; background: rgba(15, 23, 42, 0.9); border: 1px solid var(--border-glass);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem;">
+            <div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Statutory Assessment</div>
+              <div id="overallVerdictBadge" class="badge badge-verified" style="font-size: 1rem; padding: 0.5rem 1rem; margin-top: 0.25rem;">
+                MPE COMPLIANT
+              </div>
+            </div>
+            <div style="display: flex; gap: 0.75rem; align-items: center;">
+              <div class="form-group" style="margin: 0;">
+                <label style="font-size: 0.78rem;">Assign Holographic Seal Serial No:</label>
+                <input type="text" id="assignSealNumberInput" class="form-control" style="padding: 0.4rem 0.75rem; font-family: var(--font-mono);" value="SEAL-SEC-99482">
+              </div>
+              <button class="btn btn-success btn-lg" id="issueStampCertBtn" style="margin-top: 18px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                Issue Digital Stamp & e-Certificate
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- VIEW 3: PUBLIC CITIZEN / TRANSPARENCY SCANNER PORTAL           -->
+    <!-- ============================================================== -->
+    <section id="view-citizen" class="portal-view" aria-labelledby="citizenViewHeading">
+      <div class="view-header" style="text-align: center; justify-content: center;">
+        <div class="view-header-title" style="text-align: center; max-width: 680px;">
+          <h2 id="citizenViewHeading">Public Weighing Scale Verification</h2>
+          <p>Scan the QR code or enter the instrument UID to verify if the scale at your local store, petrol pump, or weighbridge is certified and tamper-proof.</p>
+        </div>
+      </div>
+
+      <!-- QR & Search Finder Box -->
+      <div class="scanner-card glass-panel">
+        <!-- Interactive Viewfinder Simulation -->
+        <div class="scanner-viewfinder" aria-label="QR Code Scanner Optical Viewfinder">
+          <div class="laser-scan-line"></div>
+          <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+        </div>
+
+        <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+          Position device QR seal inside viewfinder or lookup by registration number below:
+        </p>
+
+        <!-- Search Bar -->
+        <div class="toolbar-row" style="margin-bottom: 1rem;">
+          <div class="search-box">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="citizenSearchInput" placeholder="Enter Instrument UID (e.g. WM-2026-SCALE-8492 or SN-GLD-99824)">
+          </div>
+          <button class="btn btn-primary" id="citizenSearchBtn">
+            Verify Now
+          </button>
+        </div>
+
+        <!-- Sample Quick Click Chips -->
+        <div style="font-size: 0.8rem; color: var(--text-muted); text-align: left; margin-top: 0.5rem;">
+          <span>Sample QR Stamps to Test:</span>
+          <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.35rem;">
+            <button class="badge badge-verified sample-qr-chip" data-uid="WM-2026-SCALE-8492" style="cursor: pointer;">Gold Carat Scale (Verified)</button>
+            <button class="badge badge-verified sample-qr-chip" data-uid="WM-2026-SCALE-7721" style="cursor: pointer;">Grocery Scale (Verified)</button>
+            <button class="badge badge-expiring sample-qr-chip" data-uid="WM-2026-SCALE-5510" style="cursor: pointer;">Petrol Dispenser (Expiring)</button>
+            <button class="badge badge-expired sample-qr-chip" data-uid="WM-2026-SCALE-1049" style="cursor: pointer;">Mandi Scale (Expired!)</button>
+          </div>
+        </div>
+
+        <!-- Query Output Container -->
+        <div id="citizenQueryResultBox">
+          <!-- Dynamically populated on search -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- VIEW 4: CENTRAL REGULATORY ADMIN & ANALYTICS COMMAND CENTER    -->
+    <!-- ============================================================== -->
+    <section id="view-admin" class="portal-view" aria-labelledby="adminViewHeading">
+      <div class="view-header">
+        <div class="view-header-title">
+          <h2 id="adminViewHeading">Central Metrology Regulatory Command Center</h2>
+          <p>National compliance analytics, revenue audit logs, consumer grievance resolution, and enforcement monitoring.</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="btn btn-outline btn-sm" id="adminExportDataBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Export Audit Trail (JSON)
+          </button>
+          <button class="btn btn-outline btn-sm" id="adminResetDataBtn" style="color: var(--danger); border-color: rgba(239, 68, 68, 0.3);">
+            Reset Test Data
+          </button>
+        </div>
+      </div>
+
+      <!-- Admin KPI Counters -->
+      <div class="stats-grid">
+        <div class="stat-card" style="--stat-accent: #0ea5e9;">
+          <div class="stat-icon-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20v-6M6 20V10M18 20V4"></path></svg>
+          </div>
+          <div class="stat-content">
+            <div class="stat-label">Total Registered Instruments</div>
+            <div class="stat-value" id="adminTotalInst">6</div>
+            <div class="stat-trend positive">National Registry</div>
+          </div>
+        </div>
+
+        <div class="stat-card" style="--stat-accent: #10b981;">
+          <div class="stat-icon-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          </div>
+          <div class="stat-content">
+            <div class="stat-label">Active Valid Verifications</div>
+            <div class="stat-value" id="adminVerifiedCount">3</div>
+            <div class="stat-trend positive">In-Service Stamped</div>
+          </div>
+        </div>
+
+        <div class="stat-card" style="--stat-accent: #ef4444;">
+          <div class="stat-icon-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          </div>
+          <div class="stat-content">
+            <div class="stat-label">Expired / Non-Compliant</div>
+            <div class="stat-value" id="adminExpiredCount">1</div>
+            <div class="stat-trend danger">Enforcement Notice</div>
+          </div>
+        </div>
+
+        <div class="stat-card" style="--stat-accent: #8b5cf6;">
+          <div class="stat-icon-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          </div>
+          <div class="stat-content">
+            <div class="stat-label">Statutory Verification Revenue</div>
+            <div class="stat-value" id="adminRevenueCount">₹6,550</div>
+            <div class="stat-trend positive">Realized Collections</div>
+          </div>
+        </div>
+
+        <div class="stat-card" style="--stat-accent: #f59e0b;">
+          <div class="stat-icon-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          </div>
+          <div class="stat-content">
+            <div class="stat-label">Consumer Grievances</div>
+            <div class="stat-value" id="adminOpenGrievances">1</div>
+            <div class="stat-trend warning">Open Tickets</div>
+          </div>
+        </div>
+
+        <div class="stat-card" style="--stat-accent: #06b6d4;">
+          <div class="stat-icon-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          </div>
+          <div class="stat-content">
+            <div class="stat-label">National Compliance Index</div>
+            <div class="stat-value" id="adminComplianceRate">50%</div>
+            <div class="stat-trend positive">Regulatory Health</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grievance Redressal Panel -->
+      <div class="glass-panel">
+        <div class="panel-header">
+          <h3>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            Public Consumer Grievances & Tamper Reports
+          </h3>
+          <span class="badge badge-outline">Enforcement Action Tracker</span>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Ticket ID</th>
+                <th>Instrument UID</th>
+                <th>Establishment</th>
+                <th>Violation Category</th>
+                <th>Severity</th>
+                <th>Status</th>
+                <th>Enforcement Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminGrievancesTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Central Immutable Regulatory Audit Log Trail -->
+      <div class="glass-panel">
+        <div class="panel-header">
+          <h3>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            Cryptographic Regulatory Audit Trail (Anti-Fraud Log)
+          </h3>
+          <span class="badge badge-verified">Immutable Ledger</span>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Actor / Officer</th>
+                <th>Action Type</th>
+                <th>Event Details</th>
+                <th>Terminal IP</th>
+              </tr>
+            </thead>
+            <tbody id="adminAuditLogsTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 1: OFFICIAL VERIFICATION CERTIFICATE VIEWER / PRINT      -->
+  <!-- ============================================================== -->
+  <dialog id="certModal" class="custom-modal" aria-labelledby="certModalHeading">
+    <div class="modal-header">
+      <h3 id="certModalHeading">Digital Certificate of Verification</h3>
+      <button class="icon-btn close-modal-btn" aria-label="Close Certificate Modal">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- Printable High-Fidelity Certificate -->
+      <div class="certificate-preview-container">
+        <div class="cert-watermark">METROLOGY VERIFIED</div>
+        <div class="cert-border-outer">
+          
+          <div class="cert-header">
+            <!-- Official Emblem SVG -->
+            <svg class="cert-emblem-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="50" cy="50" r="45" stroke="#1e3a8a" stroke-width="3" fill="#f8fafc"/>
+              <path d="M50 20 L55 35 L70 35 L58 45 L62 60 L50 50 L38 60 L42 45 L30 35 L45 35 Z" fill="#d97706"/>
+              <circle cx="50" cy="50" r="25" stroke="#1e3a8a" stroke-width="1.5" stroke-dasharray="2,2"/>
+              <text x="50" y="82" font-size="8" font-weight="bold" fill="#1e3a8a" text-anchor="middle" font-family="serif">सत्यमेव जयते</text>
+            </svg>
+            <h2>DEPARTMENT OF LEGAL METROLOGY</h2>
+            <h4>GOVERNMENT VERIFICATION CERTIFICATE</h4>
+            <div style="font-size: 0.85rem; color: #475569; font-style: italic;">
+              Issued under the Standards of Weights and Measures (Legal Metrology) Regulatory Act
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.5rem;">
+            <span>Certificate No: <strong id="certModalNumber" style="font-family: monospace;">LM-CERT-2026-004812</strong></span>
+            <span>Date of Issue: <strong id="certModalDate">2026-03-15</strong></span>
+          </div>
+
+          <table class="cert-body-table">
+            <tbody>
+              <tr>
+                <td class="label-col">Establishment / Trader:</td>
+                <td class="value-col" id="certModalEstablishment">Apex Diamond & Gold Jewellers Ltd.</td>
+              </tr>
+              <tr>
+                <td class="label-col">Proprietor / Responsible Person:</td>
+                <td class="value-col" id="certModalTrader">Rajesh K. Mehta</td>
+              </tr>
+              <tr>
+                <td class="label-col">Premises Address:</td>
+                <td class="value-col" id="certModalAddress">Shop 14, Commercial Boulevard, Central Market</td>
+              </tr>
+              <tr>
+                <td class="label-col">Instrument Verified:</td>
+                <td class="value-col"><strong id="certModalInstrumentName">Precision Gold Carat Balance</strong></td>
+              </tr>
+              <tr>
+                <td class="label-col">Category & Accuracy Class:</td>
+                <td class="value-col" id="certModalType">Jewellery & Precious Metals (Class II)</td>
+              </tr>
+              <tr>
+                <td class="label-col">Model & Serial Number:</td>
+                <td class="value-col"><span id="certModalModel">METTLER-XPR205</span> | S/N: <span id="certModalSerial">SN-GLD-99824</span></td>
+              </tr>
+              <tr>
+                <td class="label-col">Capacity & Scale Interval (e):</td>
+                <td class="value-col" id="certModalCapacity">500g (Verification Interval e = 0.001g)</td>
+              </tr>
+              <tr>
+                <td class="label-col">Anti-Tamper Seal Number:</td>
+                <td class="value-col"><strong id="certModalSealNo" style="color: #b45309;">SEAL-SEC-99410</strong> (Tamper-evident holographic badge)</td>
+              </tr>
+              <tr>
+                <td class="label-col">Calibration & MPE Evaluation:</td>
+                <td class="value-col" id="certModalRemarks">PASSED all tolerance limits specified in OIML R76 standards.</td>
+              </tr>
+              <tr>
+                <td class="label-col">Validity Expiration Date:</td>
+                <td class="value-col"><strong id="certModalExpiry" style="color: #15803d; font-size: 1.05rem;">2027-03-14</strong></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="cert-footer-row">
+            <!-- Cryptographic QR Code -->
+            <div class="cert-qr-box">
+              <canvas id="certQrCanvas" width="130" height="130"></canvas>
+              <span>Scan to Verify Online Authenticity</span>
+            </div>
+
+            <!-- Holographic Security Seal Simulation -->
+            <div class="hologram-sim-seal">
+              LEGAL<br>METROLOGY<br>OFFICIAL<br>STAMP
+            </div>
+
+            <!-- Inspector Signature & Seal -->
+            <div class="cert-signature-box">
+              <div style="font-family: 'Brush Script MT', cursive, sans-serif; font-size: 1.6rem; color: #1e3a8a;">
+                Anita Sharma
+              </div>
+              <div class="cert-sig-line"></div>
+              <div style="font-size: 0.85rem; font-weight: bold;" id="certModalInspector">Dr. Anita Sharma</div>
+              <div style="font-size: 0.72rem; color: #64748b;">Senior Metrology Inspection Officer</div>
+              <div style="font-size: 0.7rem; color: #94a3b8;">Digitally Signed & Timestamped</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline close-modal-btn">Close</button>
+      <button class="btn btn-primary" id="printCertBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        Print / Save Official PDF
+      </button>
+    </div>
+  </dialog>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 2: REGISTER NEW INSTRUMENT MODAL                         -->
+  <!-- ============================================================== -->
+  <dialog id="registerInstrumentModal" class="custom-modal">
+    <div class="modal-header">
+      <h3>Register Weighing / Measuring Instrument</h3>
+      <button class="icon-btn close-modal-btn">✕</button>
+    </div>
+    <form id="registerInstrumentForm">
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>Instrument Commercial Description / Name:</label>
+            <input type="text" id="regName" class="form-control" placeholder="e.g. Countertop Electronic Grocery Scale" required>
+          </div>
+          <div class="form-group">
+            <label>Instrument Type:</label>
+            <select id="regType" class="form-control">
+              <option value="electronic_scale">Electronic Counter Scale</option>
+              <option value="precision_balance">Precision / Carat Balance</option>
+              <option value="platform_scale">Platform / Mandi Scale</option>
+              <option value="weighbridge">Heavy Industrial Weighbridge</option>
+              <option value="fuel_dispenser">Petroleum Fuel Dispenser</option>
+              <option value="lab_balance">Laboratory Analytical Balance</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Application Category:</label>
+            <select id="regCategory" class="form-control">
+              <option value="Retail & Grocery">Retail & Grocery</option>
+              <option value="Jewellery & Precious Metals">Jewellery & Precious Metals</option>
+              <option value="Agriculture & APMC Mandi">Agriculture & APMC Mandi</option>
+              <option value="Heavy Logistics & Transport">Heavy Logistics & Transport</option>
+              <option value="Petroleum & Liquid Fuels">Petroleum & Liquid Fuels</option>
+              <option value="Healthcare & Pharma Testing">Healthcare & Pharma Testing</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Accuracy Class (OIML R76):</label>
+            <select id="regAccuracyClass" class="form-control">
+              <option value="Class III">Class III (Medium Accuracy - Commercial)</option>
+              <option value="Class II">Class II (High Accuracy - Jewellery/Carat)</option>
+              <option value="Class I">Class I (Special Accuracy - Precision Lab)</option>
+              <option value="Class IV">Class IV (Ordinary Accuracy - Bulk)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Model Approval Number:</label>
+            <input type="text" id="regModel" class="form-control" placeholder="e.g. ESSAE-DS-215" required>
+          </div>
+          <div class="form-group">
+            <label>Manufacturer Serial Number:</label>
+            <input type="text" id="regSerial" class="form-control" placeholder="e.g. SN-GRO-99120" required>
+          </div>
+          <div class="form-group">
+            <label>Maximum Capacity (Max):</label>
+            <input type="text" id="regMaxCap" class="form-control" placeholder="e.g. 30kg or 500g" required>
+          </div>
+          <div class="form-group">
+            <label>Verification Scale Interval (e):</label>
+            <input type="text" id="regInterval" class="form-control" placeholder="e.g. 5g or 0.001g" required>
+          </div>
+          <div class="form-group full-width">
+            <label>Establishment Name / Commercial Entity:</label>
+            <input type="text" id="regEstablishment" class="form-control" placeholder="e.g. Greenfield Fresh Agro & Supermarket" required>
+          </div>
+          <div class="form-group full-width">
+            <label>Installation Address & Premises:</label>
+            <input type="text" id="regAddress" class="form-control" placeholder="e.g. Plot 42, Sector 8, Central Commercial Market" required>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline close-modal-btn">Cancel</button>
+        <button type="submit" class="btn btn-primary">Submit for Registry</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 3: APPLY VERIFICATION & SCHEDULE MODAL                   -->
+  <!-- ============================================================== -->
+  <dialog id="applyVerifyModal" class="custom-modal">
+    <div class="modal-header">
+      <h3>Schedule Legal Verification & Stamping</h3>
+      <button class="icon-btn close-modal-btn">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="margin-bottom: 1.25rem;">
+        <h4 id="applyModalInstName" style="color: var(--primary);"></h4>
+        <div style="font-size: 0.85rem; color: var(--text-secondary);">
+          UID: <span class="mono-id" id="applyModalInstUid"></span> | 
+          Category: <span id="applyModalInstCategory"></span> | 
+          Class: <span id="applyModalInstClass"></span>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Preferred Inspection Date:</label>
+          <input type="date" id="applyInspectionDate" class="form-control" value="2026-10-05">
+        </div>
+        <div class="form-group">
+          <label>Inspection Location Type:</label>
+          <select class="form-control">
+            <option>On-Premises Field Visit by Inspector</option>
+            <option>Authorized District Secondary Standard Laboratory</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="glass-panel" style="margin-top: 1.5rem; background: var(--bg-tertiary); padding: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 0.8rem; color: var(--text-secondary);">Statutory Fee & Stamping Charges</div>
+            <div style="font-size: 1.6rem; font-weight: 800; color: var(--success);" id="applyModalFeeAmount">₹1,003</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);" id="applyModalFeeBreakdown">Base: ₹850 + GST (18%): ₹153</div>
+          </div>
+          <span class="badge badge-outline">Standard Statutory Rate</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline close-modal-btn">Cancel</button>
+      <button class="btn btn-success" id="submitVerificationPayBtn">Proceed to Statutory Fee Payment</button>
+    </div>
+  </dialog>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 4: INSTANT STATUTORY PAYMENT GATEWAY                     -->
+  <!-- ============================================================== -->
+  <dialog id="paymentGatewayModal" class="custom-modal">
+    <div class="modal-header">
+      <h3>Government Payment Gateway (Bharat BillPay / Treasury)</h3>
+      <button class="icon-btn close-modal-btn">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <div style="font-size: 0.85rem; color: var(--text-secondary);">Total Payable Amount</div>
+        <div style="font-size: 2.2rem; font-weight: 800; color: var(--primary);" id="payGatewayAmount">₹1,003</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);" id="payGatewayItemDesc"></div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label>Select Payment Mode:</label>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+            <button class="btn btn-outline btn-sm active" type="button" style="border-color: var(--primary);">UPI / QR</button>
+            <button class="btn btn-outline btn-sm" type="button">Net Banking</button>
+            <button class="btn btn-outline btn-sm" type="button">Treasury Challan</button>
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <label>Virtual Payment Address (VPA / UPI ID):</label>
+          <input type="text" class="form-control" value="trader@okaxis" readonly>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline close-modal-btn">Cancel</button>
+      <button class="btn btn-primary" id="confirmPayGatewayBtn">Pay Now</button>
+    </div>
+  </dialog>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 5: QR STAMP PREVIEW MODAL                                -->
+  <!-- ============================================================== -->
+  <dialog id="qrModal" class="custom-modal">
+    <div class="modal-header">
+      <h3>Tamper-Evident Physical QR Seal</h3>
+      <button class="icon-btn close-modal-btn">✕</button>
+    </div>
+    <div class="modal-body" style="text-align: center;">
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+        Affix this high-security QR sticker onto the instrument chassis beside the lead wire seal.
+      </p>
+
+      <div style="display: inline-block; background: #ffffff; padding: 1.5rem; border-radius: var(--radius-md); box-shadow: var(--shadow-md);">
+        <canvas id="qrPreviewCanvas" width="200" height="200"></canvas>
+        <div style="color: #0f172a; margin-top: 0.5rem;">
+          <div style="font-weight: 800; font-family: monospace; font-size: 0.95rem;" id="qrPreviewUid">WM-2026-SCALE-8492</div>
+          <div style="font-size: 0.72rem; color: #475569;" id="qrPreviewShop">Establishment Name</div>
+          <div style="font-size: 0.7rem; font-weight: 700; color: #b45309;" id="qrPreviewSeal">SEAL: SEAL-SEC-99410</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline close-modal-btn">Close</button>
+      <button class="btn btn-primary" onclick="window.print()">Print Seal Label</button>
+    </div>
+  </dialog>
+
+  <!-- ============================================================== -->
+  <!-- MODAL 6: CONSUMER GRIEVANCE / TAMPERING REPORT MODAL           -->
+  <!-- ============================================================== -->
+  <dialog id="grievanceModal" class="custom-modal">
+    <div class="modal-header">
+      <h3 style="color: var(--danger);">🚨 Lodge Legal Metrology Grievance / Fraud Report</h3>
+      <button class="icon-btn close-modal-btn">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+        Directly alert enforcement inspectors about unverified scales, broken security seals, short delivery, or weight tampering.
+      </p>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Instrument UID / Stamp Code (if visible):</label>
+          <input type="text" id="grvInstrumentUidInput" class="form-control" placeholder="e.g. WM-2026-SCALE-1049">
+        </div>
+        <div class="form-group">
+          <label>Establishment / Store Name & Location:</label>
+          <input type="text" id="grvShopInput" class="form-control" placeholder="e.g. Super Bazaar Stall #4, Sector 12" required>
+        </div>
+        <div class="form-group">
+          <label>Violation Type:</label>
+          <select id="grvCategorySelect" class="form-control">
+            <option value="SUSPECTED_TAMPERING">Suspected Tare / Calibration Tampering</option>
+            <option value="EXPIRED_CERTIFICATE">Using Expired / Unverified Scale</option>
+            <option value="BROKEN_SEAL">Broken / Missing Security Hologram Seal</option>
+            <option value="SHORT_DELIVERY">Short Delivery / Short Measure</option>
+            <option value="NO_STAMP_DISPLAYED">Refusal to Display Verification Stamp</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Your Name (Complainant):</label>
+          <input type="text" id="grvReporterNameInput" class="form-control" placeholder="Full Name" required>
+        </div>
+        <div class="form-group">
+          <label>Contact Phone (for Inspector follow-up):</label>
+          <input type="tel" id="grvReporterPhoneInput" class="form-control" placeholder="+91 98XXX XXXXX">
+        </div>
+        <div class="form-group full-width">
+          <label>Detailed Description of Incident:</label>
+          <textarea id="grvDescriptionInput" class="form-control" placeholder="Describe the discrepancy, product weighed, reading observed, or behavior of the vendor..." required></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline close-modal-btn">Cancel</button>
+      <button class="btn btn-danger" id="submitGrievanceBtn">Submit Grievance to Legal Metrology Cell</button>
+    </div>
+  </dialog>
+
+  <!-- Toast Notification Mount -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Standalone Unified Script (Works both offline via direct double-click on file:// and via web server) -->
+  <script src="js/bundle.js"></script>
+</body>
+</html>
